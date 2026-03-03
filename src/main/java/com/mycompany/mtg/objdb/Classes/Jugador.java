@@ -67,7 +67,10 @@ public class Jugador implements Serializable {
     }
 
     public void setMazos(List<Mazo> mazos) {
-        this.mazos.clear();
+        List<Mazo> actuals = new ArrayList<>(this.mazos);
+        for (Mazo mazoActual : actuals) {
+            eliminarMazo(mazoActual);
+        }
         if (mazos != null) {
             for (Mazo mazo : mazos) {
                 afegirMazo(mazo);

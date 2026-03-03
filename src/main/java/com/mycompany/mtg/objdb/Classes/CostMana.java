@@ -4,18 +4,23 @@
  */
 package com.mycompany.mtg.objdb.Classes;
 
+import java.io.Serializable;
+import javax.persistence.Embeddable;
+
 /**
  *
  * @author alumne
  */
-public class CostMana {
+@Embeddable
+public class CostMana implements Serializable {
+    private static final long serialVersionUID = 1L;
     
-    int blanc;
-    int blau;
-    int negre;
-    int vermell;
-    int verd;
-    int incolor;
+    private int blanc;
+    private int blau;
+    private int negre;
+    private int vermell;
+    private int verd;
+    private int incolor;
     
     public CostMana() {}
 

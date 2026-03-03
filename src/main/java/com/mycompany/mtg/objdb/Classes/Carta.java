@@ -4,17 +4,49 @@
  */
 package com.mycompany.mtg.objdb.Classes;
 
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 /**
  *
  * @author alumne
  */
-public abstract class Carta {
-    Long id;
-    String nom;
-    String descripcio;
-    Raresa raresa;
-    String edicio;
-    CostMana cost;
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Carta implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(nullable = false, length = 120)
+    private String nom;
+
+    @Column(length = 500)
+    private String descripcio;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private Raresa raresa;
+
+    @Column(length = 80)
+    private String edicio;
+
+    @Embedded
+    private CostMana cost;
+
+    protected Carta() {
+    }
 
     public Carta(Long id, String nom, String descripcio, Raresa raresa, String edicio, CostMana cost) {
         this.id = id;

@@ -63,7 +63,16 @@ public class Mazo implements Serializable {
     }
 
     public void setJugador(Jugador jugador) {
+        if (this.jugador == jugador) {
+            return;
+        }
+        if (this.jugador != null) {
+            this.jugador.getMazos().remove(this);
+        }
         this.jugador = jugador;
+        if (jugador != null && !jugador.getMazos().contains(this)) {
+            jugador.getMazos().add(this);
+        }
     }
 
     public List<Carta> getCartes() {
