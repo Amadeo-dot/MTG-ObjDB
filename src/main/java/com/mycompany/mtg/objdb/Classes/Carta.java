@@ -48,6 +48,10 @@ public abstract class Carta implements Serializable {
     protected Carta() {
     }
 
+    public Carta(String nom, String descripcio, Raresa raresa, String edicio, CostMana cost) {
+        this(null, nom, descripcio, raresa, edicio, cost);
+    }
+
     public Carta(Long id, String nom, String descripcio, Raresa raresa, String edicio, CostMana cost) {
         this.id = id;
         this.nom = nom;

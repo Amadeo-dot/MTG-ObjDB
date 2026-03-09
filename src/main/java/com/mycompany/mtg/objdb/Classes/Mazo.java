@@ -1,8 +1,10 @@
 package com.mycompany.mtg.objdb.Classes;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,11 +29,14 @@ public class Mazo implements Serializable {
     @Column(nullable = false, length = 120)
     private String nom;
 
+    @Column(nullable = false)
+    private LocalDate dataCreacio;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "jugador_id")
     private Jugador jugador;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "mazo_cartas",
             joinColumns = @JoinColumn(name = "mazo_id"),
@@ -43,7 +48,12 @@ public class Mazo implements Serializable {
     }
 
     public Mazo(String nom) {
+        this(nom, LocalDate.now());
+    }
+
+    public Mazo(String nom, LocalDate dataCreacio) {
         this.nom = nom;
+        this.dataCreacio = dataCreacio;
     }
 
     public Long getId() {
@@ -56,6 +66,14 @@ public class Mazo implements Serializable {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public LocalDate getDataCreacio() {
+        return dataCreacio;
+    }
+
+    public void setDataCreacio(LocalDate dataCreacio) {
+        this.dataCreacio = dataCreacio;
     }
 
     public Jugador getJugador() {
@@ -80,7 +98,7 @@ public class Mazo implements Serializable {
     }
 
     public void setCartes(List<Carta> cartes) {
-        this.cartes = cartes;
+        this.cartes = cartes == null ? new ArrayList<>() : cartes;
     }
 
     public void afegirCarta(Carta carta) {

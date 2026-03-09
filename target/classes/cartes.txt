@@ -1,0 +1,17 @@
+# Format:
+# TIPUS;NOM;DESCRIPCIO;RARESA;EDICIO;BLANC,BLAU,NEGRE,VERMELL,VERD,INCOLOR;...camps extra...
+# CRIATURA -> ...;forca;resistencia;tipusCriatura;vola
+# TERRA -> ...;produccio;esBasica
+# ENCANTERI -> ...;tipus;esInstantani
+
+CRIATURA;Drac Shivan;Criatura gran amb alens de foc.;MITICA;Alpha;0,0,2,2,0,2;5;5;Drac;true
+CRIATURA;Vampir Nocturn;Guanya forca de nit.;INFREQUENT;Innistrad;0,0,3,0,0,1;4;3;Vampir;true
+CRIATURA;Elfa de Llanowar;Accelera el mana verd.;COMUNA;Dominaria;0,0,0,0,1,0;1;1;Elf;false
+
+TERRA;Illa Basica;Produeix mana blau.;COMUNA;CoreSet;0,0,0,0,0,0;BLAU;true
+TERRA;Muntanya Basica;Produeix mana vermell.;COMUNA;CoreSet;0,0,0,0,0,0;VERMELL;true
+TERRA;Jardi Tropical;Dona mana blau o verd.;RARA;Ravnica;0,0,0,0,0,0;VERD;false
+
+ENCANTERI;Ira de Deu;Destrueix totes les criatures.;RARA;Revised;0,2,0,0,0,2;Global;false
+ENCANTERI;Malediccio Fosca;Debilita les criatures enemigues.;INFREQUENT;Theros;0,0,2,0,0,2;Malediccio;true
+ENCANTERI;Aura Ardida;Dona bonus d atac.;COMUNA;Zendikar;0,0,0,1,0,4;Aura;false
