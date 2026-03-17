@@ -63,6 +63,14 @@ public class GestorCartes {
         return em.createQuery("SELECT c FROM Carta c", Carta.class).getResultList();
     }
 
+    public List<Jugador> llistarJugadors() {
+        return em.createQuery("SELECT j FROM Jugador j", Jugador.class).getResultList();
+    }
+
+    public List<Mazo> llistarMazos() {
+        return em.createQuery("SELECT m FROM Mazo m", Mazo.class).getResultList();
+    }
+
     public void importarCartes(String rutaArxiu) {
         List<String> linies;
         try {
