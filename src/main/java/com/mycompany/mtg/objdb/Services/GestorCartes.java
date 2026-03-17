@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.text.Normalizer;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -79,6 +80,32 @@ public class GestorCartes {
                     em.persist(carta);
                 }
             }
+            tx.commit();
+        } catch (RuntimeException ex) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw ex;
+        }
+    }
+
+    public void reiniciarBaseDades() {
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+
+            List<Jugador> jugadors = em.createQuery("SELECT j FROM Jugador j", Jugador.class)
+                    .getResultList();
+            for (Jugador jugador : jugadors) {
+                em.remove(jugador);
+            }
+
+            List<Carta> cartes = em.createQuery("SELECT c FROM Carta c", Carta.class)
+                    .getResultList();
+            for (Carta carta : cartes) {
+                em.remove(carta);
+            }
+
             tx.commit();
         } catch (RuntimeException ex) {
             if (tx.isActive()) {
@@ -267,17 +294,25 @@ public class GestorCartes {
             return null;
         }
 
+        if (txt.contains("|")) {
+            return parsejarCartaFormatPipe(txt);
+        }
+
+        return parsejarCartaFormatAntic(txt);
+    }
+
+    private Carta parsejarCartaFormatAntic(String txt) {
         String[] p = txt.split(";");
         if (p.length < 8) {
-            throw new IllegalArgumentException("Linia invalida: " + linia);
+            throw new IllegalArgumentException("Linia invalida: " + txt);
         }
 
         String tipus = p[0].trim().toUpperCase();
         String nom = p[1].trim();
         String descripcio = p[2].trim();
-        Raresa raresa = Raresa.valueOf(p[3].trim().toUpperCase());
+        Raresa raresa = parsejarRaresa(p[3]);
         String edicio = p[4].trim();
-        CostMana cost = parsejarCost(p[5].trim());
+        CostMana cost = parsejarCostOrdreAntic(p[5].trim());
 
         if ("CRIATURA".equals(tipus)) {
             return new Criatura(
@@ -300,7 +335,7 @@ public class GestorCartes {
                     raresa,
                     edicio,
                     cost,
-                    ColorMana.valueOf(p[6].trim().toUpperCase()),
+                    ColorMana.valueOf(normalitzarToken(p[6])),
                     Boolean.parseBoolean(p[7].trim())
             );
         }
@@ -320,7 +355,62 @@ public class GestorCartes {
         throw new IllegalArgumentException("Tipus desconegut: " + tipus);
     }
 
-    private CostMana parsejarCost(String txt) {
+    private Carta parsejarCartaFormatPipe(String txt) {
+        String[] p = txt.split("\\|");
+        for (int i = 0; i < p.length; i++) {
+            p[i] = p[i].trim();
+        }
+
+        String tipus = normalitzarToken(p[0]);
+        String nom = p[1];
+        String descripcio = p[2];
+        Raresa raresa = parsejarRaresa(p[3]);
+        String edicio = "";
+
+        if ("CRIATURA".equals(tipus)) {
+            CostMana cost = parsejarCostOrdreImatge(p[4]);
+            return new Criatura(
+                    nom,
+                    descripcio,
+                    raresa,
+                    edicio,
+                    cost,
+                    Integer.parseInt(p[5]),
+                    Integer.parseInt(p[6]),
+                    p[7],
+                    Boolean.parseBoolean(p[8])
+            );
+        }
+
+        if ("TERRA".equals(tipus)) {
+            return new Terra(
+                    nom,
+                    descripcio,
+                    raresa,
+                    edicio,
+                    new CostMana(),
+                    ColorMana.valueOf(normalitzarToken(p[4])),
+                    Boolean.parseBoolean(p[5])
+            );
+        }
+
+        if ("ENCANTERI".equals(tipus)) {
+            CostMana cost = parsejarCostOrdreImatge(p[4]);
+            return new Encanteri(
+                    nom,
+                    descripcio,
+                    raresa,
+                    edicio,
+                    cost,
+                    p[5],
+                    Boolean.parseBoolean(p[6])
+            );
+        }
+
+        throw new IllegalArgumentException("Tipus desconegut: " + tipus);
+    }
+
+    private CostMana parsejarCostOrdreAntic(String txt) {
         String[] c = txt.split(",");
         if (c.length != 6) {
             throw new IllegalArgumentException("Cost invalid: " + txt);
@@ -333,5 +423,31 @@ public class GestorCartes {
                 Integer.parseInt(c[4].trim()),
                 Integer.parseInt(c[5].trim())
         );
+    }
+
+    private CostMana parsejarCostOrdreImatge(String txt) {
+        String[] c = txt.split(",");
+        if (c.length != 6) {
+            throw new IllegalArgumentException("Cost invalid: " + txt);
+        }
+        int blau = Integer.parseInt(c[0].trim());
+        int negre = Integer.parseInt(c[1].trim());
+        int vermell = Integer.parseInt(c[2].trim());
+        int verd = Integer.parseInt(c[3].trim());
+        int blanc = Integer.parseInt(c[4].trim());
+        int incolor = Integer.parseInt(c[5].trim());
+
+        return new CostMana(blanc, blau, negre, vermell, verd, incolor);
+    }
+
+    private Raresa parsejarRaresa(String txt) {
+        return Raresa.valueOf(normalitzarToken(txt));
+    }
+
+    private String normalitzarToken(String txt) {
+        String text = txt == null ? "" : txt.trim().toUpperCase();
+        text = Normalizer.normalize(text, Normalizer.Form.NFD);
+        text = text.replaceAll("\\p{M}", "");
+        return text;
     }
 }

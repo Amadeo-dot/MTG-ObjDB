@@ -19,12 +19,18 @@ public class MTGObjDB {
     public static void main(String[] args) {
         String rutaBd = "objectdb:db/mtg.odb";
         String rutaFitxer = "src/main/resources/cartes.txt";
+        boolean reiniciar = args != null && args.length > 0
+                && "reiniciar".equalsIgnoreCase(args[0]);
 
         GestorCartes gestor = new GestorCartes();
         gestor.obrirConnexio(rutaBd);
 
         try {
-            if (gestor.comptarCartes() == 0) {
+            if (reiniciar) {
+                gestor.reiniciarBaseDades();
+                gestor.importarCartes(rutaFitxer);
+                System.out.println("Base de dades reiniciada i cartes importades.");
+            } else if (gestor.comptarCartes() == 0) {
                 gestor.importarCartes(rutaFitxer);
                 System.out.println("Cartes importades.");
             } else {

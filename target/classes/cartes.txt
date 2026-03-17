@@ -1,17 +1,21 @@
-# Format:
-# TIPUS;NOM;DESCRIPCIO;RARESA;EDICIO;BLANC,BLAU,NEGRE,VERMELL,VERD,INCOLOR;...camps extra...
-# CRIATURA -> ...;forca;resistencia;tipusCriatura;vola
-# TERRA -> ...;produccio;esBasica
-# ENCANTERI -> ...;tipus;esInstantani
+# TIPUS | NOM | DESCRIPCIO | RARESA | COST_MANA (Blau,Negre,Vermell,Verd,Blanc,Incolor) | ATRIBUTS_ESPECIFICS
+# CRIATURES: Nom | Desc | Raresa | Cost | Forca | Resistencia | Tipus | Vola
+CRIATURA|Drac de Foc|Un drac majestuós que crema tot al seu pas.|RARA|0,0,2,0,0,4|5|5|Drac|true
+CRIATURA|Cavaller de l'Alba|Protector del regne amb armadura de plata.|COMUNA|0,0,0,0,2,1|2|2|Huma|false
+CRIATURA|Guerrer de la Selva|Coneix cada racó del bosc primigeni.|COMUNA|0,0,0,2,0,1|3|2|Elf|false
+CRIATURA|Espectre de la Nit|Apareix quan la lluna es plena i s'emporta les animes.|MITICA|0,3,0,0,0,2|4|3|Espectre|true
+CRIATURA|Cranc de Vidre|Una criatura marina amb una closca transparent.|INFREQUENT|2,0,0,0,0,2|1|5|Cranc|false
 
-CRIATURA;Drac Shivan;Criatura gran amb alens de foc.;MITICA;Alpha;0,0,2,2,0,2;5;5;Drac;true
-CRIATURA;Vampir Nocturn;Guanya forca de nit.;INFREQUENT;Innistrad;0,0,3,0,0,1;4;3;Vampir;true
-CRIATURA;Elfa de Llanowar;Accelera el mana verd.;COMUNA;Dominaria;0,0,0,0,1,0;1;1;Elf;false
+# TERRES: Nom | Desc | Raresa | Color_Produccio | Es_Basica
+TERRA|Muntanya Volcanica|Una muntanya que fumeja constantment.|COMUNA|VERMELL|true
+TERRA|Illa de Cristall|Aigües tan pures que semblen miralls.|COMUNA|BLAU|true
+TERRA|Pantà Corrupte|Aigües estancades plenes de malediccions.|COMUNA|NEGRE|true
+TERRA|Bosc Ancestral|Arbres que han vist néixer el món.|COMUNA|VERD|true
+TERRA|Plana Daurada|Camps infinits de blat sota el sol.|COMUNA|BLANC|true
 
-TERRA;Illa Basica;Produeix mana blau.;COMUNA;CoreSet;0,0,0,0,0,0;BLAU;true
-TERRA;Muntanya Basica;Produeix mana vermell.;COMUNA;CoreSet;0,0,0,0,0,0;VERMELL;true
-TERRA;Jardi Tropical;Dona mana blau o verd.;RARA;Ravnica;0,0,0,0,0,0;VERD;false
-
-ENCANTERI;Ira de Deu;Destrueix totes les criatures.;RARA;Revised;0,2,0,0,0,2;Global;false
-ENCANTERI;Malediccio Fosca;Debilita les criatures enemigues.;INFREQUENT;Theros;0,0,2,0,0,2;Malediccio;true
-ENCANTERI;Aura Ardida;Dona bonus d atac.;COMUNA;Zendikar;0,0,0,1,0,4;Aura;false
+# ENCANTERIS: Nom | Desc | Raresa | Cost | Tipus | Es_Instantani
+ENCANTERI|Bola de Foc|Explosio massiva que danya a l'enemic.|RARA|0,0,1,0,0,2|Global|false
+ENCANTERI|Contrahechizo|Anul·la la magia de l'adversari al moment.|INFREQUENT|2,0,0,0,0,0|Aura|true
+ENCANTERI|Creixement Gegant|La criatura objectiu guanya força temporalment.|COMUNA|0,0,0,1,0,0|Aura|true
+ENCANTERI|Judici Divi|Elimina totes les amenaces del camp.|MITICA|0,0,0,0,3,3|Global|false
+ENCANTERI|Llum de Curacio|Restaura la salut del jugador.|COMUNA|0,0,0,0,1,1|Malediccio|true

@@ -3,7 +3,6 @@ package com.mycompany.mtg.objdb.Services;
 import com.mycompany.mtg.objdb.Classes.Carta;
 import com.mycompany.mtg.objdb.Classes.Criatura;
 import com.mycompany.mtg.objdb.Classes.Encanteri;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -24,34 +23,23 @@ public class ConsultesCartes {
     }
 
     public List<Carta> cartesPolimorfiquesCriaturesQueVolenINegreMesDe(int minimNegre) {
-        String jpql = "SELECT c FROM Criatura c "
-                + "WHERE c.vola = true AND c.cost.negre > :minimNegre";
-        List<Criatura> criatures = em.createQuery(jpql, Criatura.class)
+        String jpql = "SELECT c FROM Carta c, Criatura cr "
+                + "WHERE c = cr "
+                + "AND cr.vola = true "
+                + "AND cr.cost.negre > :minimNegre";
+        return em.createQuery(jpql, Carta.class)
                 .setParameter("minimNegre", minimNegre)
                 .getResultList();
-        return new ArrayList<>(criatures);
     }
 
     public Double mitjanaForcaCriaturesDeJugador(String nick) {
-        String jpql = "SELECT c FROM Jugador j JOIN j.mazos m JOIN m.cartes c "
-                + "WHERE j.nick = :nick";
-        List<Carta> cartes = em.createQuery(jpql, Carta.class)
+        String jpql = "SELECT AVG(c.forca) "
+                + "FROM Jugador j JOIN j.mazos m, Criatura c "
+                + "WHERE j.nick = :nick AND c MEMBER OF m.cartes";
+        Double mitjana = em.createQuery(jpql, Double.class)
                 .setParameter("nick", nick)
-                .getResultList();
-
-        int suma = 0;
-        int total = 0;
-        for (Carta carta : cartes) {
-            if (carta instanceof Criatura criatura) {
-                suma += criatura.getForca();
-                total++;
-            }
-        }
-
-        if (total == 0) {
-            return 0.0;
-        }
-        return (double) suma / total;
+                .getSingleResult();
+        return mitjana == null ? 0.0 : mitjana;
     }
 
     public List<Encanteri> encanterisSenseBlauNiBlancIAmbIncolorAlt(int minimIncolor) {
