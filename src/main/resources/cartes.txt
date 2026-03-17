@@ -19,4 +19,3 @@ ENCANTERI|Contrahechizo|Anul·la la màgia de l'adversari al moment.|INFREQÜENT
 ENCANTERI|Creixement Gegant|La criatura objectiu guanya força temporalment.|COMUNA|0,0,0,1,0,0|Aura|true
 ENCANTERI|Judici Diví|Elimina totes les amenaces del camp.|MITICA|0,0,0,0,3,3|Global|false
 ENCANTERI|Llum de Curació|Restaura la salut del jugador.|COMUNA|0,0,0,0,1,1|Maledicció|true
-
